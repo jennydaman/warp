@@ -3,6 +3,7 @@ version 1.0
 task CreateExtendedIlluminaManifest {
   input {
     File input_csv
+    File bead_pool_manifest_file
     String output_base_name
     File cluster_file
 
@@ -23,11 +24,18 @@ task CreateExtendedIlluminaManifest {
     Int preemptible_tries
   }
 
+  String extended_illumina_manifest_filename = output_base_name + ".extended.csv"
+  String bad_assays_filename = output_base_name + ".bad_assays.csv"
+  String report_filename = output_base_name + ".report.txt"
+
   command <<<
-    java -Xms13g -Dpicard.useLegacyParser=false -jar /usr/gitc/picard-private.jar \
+    java -Xms13g -jar /usr/picard/picard.jar \
             CreateExtendedIlluminaManifest \
             --INPUT ~{input_csv} \
-            --OUTPUT_BASE_FILE ~{output_base_name} \
+            --BEAD_POOL_MANIFEST_FILE ~{bead_pool_manifest_file} \
+            --OUTPUT ~{extended_illumina_manifest_filename} \
+            --BAD_ASSAYS_FILE ~{bad_assays_filename} \
+            --REPORT_FILE ~{report_filename} \
             --CLUSTER_FILE ~{cluster_file} \
             --DBSNP_FILE ~{dbSNP_vcf_file} \
             --TARGET_BUILD 37 \
@@ -38,16 +46,16 @@ task CreateExtendedIlluminaManifest {
   >>>
 
   runtime {
-    docker: "us.gcr.io/broad-arrays-prod/arrays-picard-private:4.0.10-1602016912"
+    docker: "us.gcr.io/broad-gotc-prod/picard-cloud:gg_GL-600_Test"
     disks: "local-disk " + disk_size + " HDD"
     memory: "14 GiB"
     preemptible: preemptible_tries
   }
 
   output {
-    File output_csv = "~{output_base_name}.extended.csv"
-    File output_bad_assays_file = "~{output_base_name}.bad_assays.csv"
-    File report_file = "~{output_base_name}.report.txt"
+    File output_csv = extended_illumina_manifest_filename
+    File output_bad_assays_file = bad_assays_filename
+    File report_file = report_filename
   }
 }
 
