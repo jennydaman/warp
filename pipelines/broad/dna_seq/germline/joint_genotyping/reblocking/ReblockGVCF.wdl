@@ -4,7 +4,7 @@ import "../../../../../../tasks/broad/GermlineVariantDiscovery.wdl" as Calling
 
 workflow ReblockGVCF {
 
-  String pipeline_version = "1.1.0"
+  String pipeline_version = "1.2.0"
 
   input {
     File gvcf
@@ -12,7 +12,7 @@ workflow ReblockGVCF {
     File ref_dict
     File ref_fasta
     File ref_fasta_index
-    String docker_image = "us.gcr.io/broad-gatk/gatk:4.1.8.0"
+    String docker_image = "us.gcr.io/broad-dsde-methods/update_reblocking@sha256:9b3296c374e852785d18a4f044ba2aed5c815f4bcde8061bc2a25fde296dd642"
   }
 
   String gvcf_basename = basename(gvcf, ".g.vcf.gz")
