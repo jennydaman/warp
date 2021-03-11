@@ -65,7 +65,6 @@ workflow ValidateChip {
   call InternalTasks.CreateExtendedIlluminaManifest {
     input:
       input_csv = chip_manifest_csv_file,
-      bead_pool_manifest_file = bead_pool_manifest_file,
       output_base_name = chip_type + ".1.6",
       cluster_file = cluster_file,
       dbSNP_vcf_file = dbSNP_vcf,
@@ -135,16 +134,16 @@ workflow ValidateChip {
       preemptible_tries = preemptible_tries
   }
 
-  call GenotypingTasks.ValidateVariants {
-    input:
-      input_vcf_file = GtcToVcf.output_vcf,
-      input_vcf_index_file = GtcToVcf.output_vcf_index,
-      ref_fasta = ref_fasta,
-      ref_fasta_index = ref_fasta_index,
-      ref_dict = ref_dict,
-      disk_size = disk_size,
-      preemptible_tries = preemptible_tries
-  }
+#  call GenotypingTasks.ValidateVariants {
+#    input:
+#      input_vcf_file = GtcToVcf.output_vcf,
+#      input_vcf_index_file = GtcToVcf.output_vcf_index,
+#      ref_fasta = ref_fasta,
+#      ref_fasta_index = ref_fasta_index,
+#      ref_dict = ref_dict,
+#      disk_size = disk_size,
+#      preemptible_tries = preemptible_tries
+#  }
 
   call GenotypingTasks.VcfToIntervalList {
     input:

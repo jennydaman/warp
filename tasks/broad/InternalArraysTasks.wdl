@@ -3,7 +3,6 @@ version 1.0
 task CreateExtendedIlluminaManifest {
   input {
     File input_csv
-    File bead_pool_manifest_file
     String output_base_name
     File cluster_file
 
@@ -32,14 +31,13 @@ task CreateExtendedIlluminaManifest {
     java -Xms13g -jar /usr/picard/picard.jar \
             CreateExtendedIlluminaManifest \
             --INPUT ~{input_csv} \
-            --BEAD_POOL_MANIFEST_FILE ~{bead_pool_manifest_file} \
             --OUTPUT ~{extended_illumina_manifest_filename} \
             --BAD_ASSAYS_FILE ~{bad_assays_filename} \
             --REPORT_FILE ~{report_filename} \
             --CLUSTER_FILE ~{cluster_file} \
             --DBSNP_FILE ~{dbSNP_vcf_file} \
             --TARGET_BUILD 37 \
-            --TARGET_REFERENCE_FILE ~{ref_fasta} \
+            --REFERENCE_SEQUENCE ~{ref_fasta} \
             --SUPPORTED_BUILD 36 \
             --SUPPORTED_REFERENCE_FILE ~{supported_ref_fasta} \
             --SUPPORTED_CHAIN_FILE ~{chain_file}
